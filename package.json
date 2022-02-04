@@ -1,22 +1,21 @@
 {
-  "name": "ecommerce-rest-api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "ecommerceapi",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www",
+    "devstart": "nodemon ./bin/www",
+    "serverstart": "DEBUG=express-locallibrary-tutorial:* npm run devstart"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/slavonicsniper/ecommerce-rest-api.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/slavonicsniper/ecommerce-rest-api/issues"
-  },
-  "homepage": "https://github.com/slavonicsniper/ecommerce-rest-api#readme",
   "dependencies": {
-    "express": "^4.17.2"
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "pug": "2.0.0-beta11"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
