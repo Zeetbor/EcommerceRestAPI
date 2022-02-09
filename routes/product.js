@@ -5,7 +5,7 @@ productRouter.get('/products', (req, res, next) => {
   res.send();
 });
 
-productRouter.get('/product:id', (req, res, next) => {
+productRouter.get('/products:id', (req, res, next) => {
   res.send();
 })
 

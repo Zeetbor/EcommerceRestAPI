@@ -1,15 +1,14 @@
 const express = require('express');
 const userRouter = express.Router();
+const userQueries = require("../userQueries.js")
 
-userRouter.get('/user', (req, res, next) => {
-  res.send();
-});
+userRouter.get('/', userQueries.getUsers);
 
-usertRouter.get('/user:id', (req, res, next) => {
+userRouter.get('/:id', (req, res, next) => {
   res.send();
 })
 
-userRouter.put('/user', (req, res, next) => {
+userRouter.put('/:id', (req, res, next) => {
   res.send();
 })
 
