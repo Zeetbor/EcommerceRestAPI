@@ -1,19 +1,19 @@
 const express = require('express');
 const orderRouter = express.Router();
 
-orderRouter.get('order', (req, res, next) => {
-  res.send();
+orderRouter.get('/', (req, res, next) => {
+  res.send('order page');
 });
 
-orderRouter.put('/order', (req, res, next) => {
+orderRouter.put('/:id', (req, res, next) => {
   res.send();
 })
 
-orderRouter.post('/order', (req, res, next) => {
+orderRouter.post('/:id', (req, res, next) => {
 
 })
 
-orderRouter.delete('/order', (req, res, next) => {
+orderRouter.delete('/:id', (req, res, next) => {
   res.send();
 })
 

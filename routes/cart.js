@@ -5,15 +5,15 @@ cartRouter.get('/', (req, res, next) => {
   res.send('cartPage');
 });
 
-cartRouter.put('/cart', (req, res, next) => {
+cartRouter.put('/', (req, res, next) => {
   res.send();
 })
 
-cartRouter.post('/cart', (req, res, next) => {
+cartRouter.post('/', (req, res, next) => {
 
 })
 
-cartRouter.delete('/cart', (req, res, next) => {
+cartRouter.delete('/', (req, res, next) => {
   res.send();
 })
 

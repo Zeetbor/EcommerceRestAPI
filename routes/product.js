@@ -1,23 +1,22 @@
 const express = require('express');
 const productRouter = express.Router();
+const productQueries = require('../productQueries.js')
 
-productRouter.get('/products', (req, res, next) => {
-  res.send();
-});
+productRouter.get('/', productQueries.getProducts);
 
-productRouter.get('/products:id', (req, res, next) => {
-  res.send();
-})
-
-productRouter.put('/products', (req, res, next) => {
+productRouter.get('/:id', (req, res, next) => {
   res.send();
 })
 
-productRouter.post('/products', (req, res, next) => {
+productRouter.put('/:id', (req, res, next) => {
   res.send();
 })
 
-productRouter.delete('/products', (req, res, next) => {
+productRouter.post('/:id', (req, res, next) => {
+  res.send();
+})
+
+productRouter.delete('/:id', (req, res, next) => {
   res.send();
 })
 

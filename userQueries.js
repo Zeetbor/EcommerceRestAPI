@@ -11,12 +11,14 @@ const getUsers = (request, response) => {
 
 const getUserById = (request, response) => {
   const id = parseInt(request.params.id)
-
+    console.log(id)
   db.query('SELECT * FROM users WHERE id = $1', [id], (err, results) => {
     if (err) {
+      console.log(err)
       throw err
     }
-    response.status(200).json(results.rows)
+    console.log(results)
+    response.status(200).json(results.rows);
   })
 }
 

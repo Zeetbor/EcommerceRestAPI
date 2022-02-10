@@ -4,20 +4,12 @@ const userQueries = require("../userQueries.js")
 
 userRouter.get('/', userQueries.getUsers);
 
-userRouter.get('/:id', (req, res, next) => {
-  res.send();
-})
+userRouter.get('/:id', userQueries.getUserById);
 
-userRouter.put('/:id', (req, res, next) => {
-  res.send();
-})
+userRouter.put('/:id', userQueries.updateUser);
 
-userRouter.post('/user', (req, res, next) => {
+userRouter.post('/:id', userQueries.createUser);
 
-})
-
-userRouter.delete('/user', (req, res, next) => {
-  res.send();
-})
+userRouter.delete('/:id', userQueries.deleteUser);
 
 module.exports = userRouter;

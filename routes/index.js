@@ -9,6 +9,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/login', passport.authenticate('local'), (req, res, next) => {
+  res.render('login');
   res.status(200).send('Authenticated.')
 });
 
