@@ -1,7 +1,7 @@
 const express = require('express');
 const orderRouter = express.Router();
 
-orderRouter.get('/order', (req, res, next) => {
+orderRouter.get('order', (req, res, next) => {
   res.send();
 });
 

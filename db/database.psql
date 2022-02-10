@@ -1,11 +1,12 @@
+DROP DATABASE IF EXISTS Ecommerce;
+CREATE DATABASE Ecommerce;
+
 CREATE TABLE IF NOT EXISTS users (
-  id SERIAL PRIMARY KEY,
+  id SERIAL PRIMARY KEY NOT NULL,
   contact_id INTEGER,
   payment_id INTEGER,
   email VARCHAR(100),
-  password VARCHAR(256),
-  first_name VARCHAR(50),
-  last_name VARCHAR(50)
+  password VARCHAR(256)
 );
 
 CREATE TABLE IF NOT EXISTS contact_details (
@@ -16,15 +17,14 @@ CREATE TABLE IF NOT EXISTS contact_details (
   address_line2 VARCHAR(100),
   city_town VARCHAR(50),
   postcode VARCHAR(8),
-  phone VARCHAR(11),
-  email VARCHAR(100)
+  phone VARCHAR(11)
 );
 
 CREATE TABLE IF NOT EXISTS payment (
   id SERIAL PRIMARY KEY,
   name_on_card VARCHAR(100),
   payment_type VARCHAR(20),
-  card_number INTEGER,
+  card_number VARCHAR(16),
   expiry DATE
 );
 
@@ -55,13 +55,15 @@ CREATE TABLE IF NOT EXISTS carts (
 CREATE TABLE IF NOT EXISTS orders_products (
   order_id INTEGER,
   product_id INTEGER,
-  quantity INTEGER
+  quantity INTEGER,
+  PRIMARY KEY(order_id, product_id)
 );
 
 CREATE TABLE IF NOT EXISTS carts_products (
   cart_id INTEGER,
   product_id INTEGER,
-  quantity INTEGER
+  quantity INTEGER,
+  PRIMARY KEY(cart_id, product_id)
 );
 
 ALTER TABLE users
@@ -87,3 +89,27 @@ ADD FOREIGN KEY (cart_id) REFERENCES carts(id);
 
 ALTER TABLE carts_products
 ADD FOREIGN KEY (product_id) REFERENCES products(id);
+
+INSERT INTO contact_details (first_name, last_name, address_line1, address_line2, city_town, postcode, phone)
+VALUES
+	('bob', 'conrad', '123 main street', 'codeville', 'main city', 'MA34 1QR', '07745682901');
+
+INSERT INTO payment (name_on_card, payment_type, card_number, expiry)
+VALUES
+	('Bob Conrad', 'VISA', 4431562178013497, '2024-11-14');
+
+INSERT INTO users (contact_id, payment_id, email, password)
+VALUES
+	(1, 1, 'bob@gmail.com', 'letmein');
+
+INSERT INTO products (product_name, category, description, price)
+VALUES
+	('LG TV', 'Electronics', 'LG TV - Full UHD & Dolby Atmos', '300');
+
+INSERT INTO orders (user_id, created, total, status)
+VALUES
+	(1, CURRENT_TIMESTAMP, 300, 'In Transit');
+
+  INSERT INTO orders_products (order_id, product_id, quantity)
+  VALUES
+  	(1, 1, 1);
