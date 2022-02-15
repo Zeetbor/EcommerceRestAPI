@@ -22,21 +22,22 @@ const userRouter = require('./routes/user');
 const productRouter = require('./routes/product');
 const cartRouter = require('./routes/cart');
 const orderRouter = require('./routes/order');
-const authRouter = require('./routes/auth');
 
 var app = express();
 
 //sets view engine
 app.set('view engine', 'pug');
-app.set('view options', { layout: false });
+app.set('view options', {
+  layout: false
+});
 app.set('views', path.join(__dirname, 'views'));
 
 //PASSPORT
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
-  resave: false ,
-  saveUninitialized: true ,
+  resave: false,
+  saveUninitialized: true,
 }))
 // This is the basic express session({..}) initialization.
 
@@ -45,37 +46,39 @@ app.use(passport.initialize())
 app.use(passport.session())
 // allow passport to use 'express-session
 
-authUser = (user, password, done) => {
-  db.query('SELECT email, password FROM users WHERE email = $1', [user], (err, result) => {
+//wheb submitting from input forms passport expects request.body fields as req.username (not email) and req.password
+authUser = (email, password, done) => {
+  db.query('SELECT email, password FROM users WHERE email = $1', [email], (err, result) => {
     if (err) {
       return next(err)
     }
-    if(result.rows.length === 0 || result.rows[0].password !== password) {
-      return done(null, false, { message: 'Incorrect email or password.' })
+    if (result.rows.length === 0 || result.rows[0].password !== password) {
+      return done(null, false, {
+        message: 'Incorrect email or password.'
+      })
     }
     return done(null, result.rows[0])
   })
 };
 // The 'authUser' function contains the steps to authenticate a user, and will return the 'authenticated user'.
 
-passport.use(new LocalStrategy (authUser));
+passport.use(new LocalStrategy(authUser));
 
-passport.serializeUser( (user, done) => {
-  done(null, user.email)
+// used to serialize the user for the session - user.email saved to session (req.session.passport = {email: '...'})
+passport.serializeUser((user, done) => {
+  done(null, user.email);
 });
 
-passport.deserializeUser((user, done) => {
-  done (null, user.email )
+// used to deserialize the user - id is user.email saved from serializeUser function
+passport.deserializeUser((id, done) => {
+  done(null, {id});
 });
-
-app.post ('/login', passport.authenticate('local', {
-   successRedirect: '/dashboard',
-   failureRedirect: '/login',
-}))
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -85,7 +88,6 @@ app.use('/user', userRouter);
 app.use('/product', productRouter);
 app.use('/cart', cartRouter);
 app.use('/order', orderRouter);
-app.use('/login', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

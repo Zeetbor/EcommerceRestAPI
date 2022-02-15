@@ -4,20 +4,12 @@ const productQueries = require('../productQueries.js')
 
 productRouter.get('/', productQueries.getProducts);
 
-productRouter.get('/:id', (req, res, next) => {
-  res.send();
-})
+productRouter.get('/:id', productQueries.getProductById);
 
-productRouter.put('/:id', (req, res, next) => {
-  res.send();
-})
+productRouter.put('/:id', productQueries.updateProduct)
 
-productRouter.post('/:id', (req, res, next) => {
-  res.send();
-})
+productRouter.post('/', productQueries.addProduct)
 
-productRouter.delete('/:id', (req, res, next) => {
-  res.send();
-})
+productRouter.delete('/:id', productQueries.deleteProduct)
 
 module.exports = productRouter;

@@ -3,14 +3,13 @@ CREATE DATABASE Ecommerce;
 
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY NOT NULL,
-  contact_id INTEGER,
-  payment_id INTEGER,
   email VARCHAR(100),
   password VARCHAR(256)
 );
 
 CREATE TABLE IF NOT EXISTS contact_details (
   id SERIAL PRIMARY KEY,
+  user_id INTEGER,
   first_name VARCHAR(50),
   last_name VARCHAR(50),
   address_line1 VARCHAR(100),
@@ -22,6 +21,7 @@ CREATE TABLE IF NOT EXISTS contact_details (
 
 CREATE TABLE IF NOT EXISTS payment (
   id SERIAL PRIMARY KEY,
+  user_id INTEGER,
   name_on_card VARCHAR(100),
   payment_type VARCHAR(20),
   card_number VARCHAR(16),
@@ -66,11 +66,11 @@ CREATE TABLE IF NOT EXISTS carts_products (
   PRIMARY KEY(cart_id, product_id)
 );
 
-ALTER TABLE users
-ADD FOREIGN KEY (contact_id) REFERENCES contact_details(id);
+ALTER TABLE contact_details
+ADD FOREIGN KEY (user_id) REFERENCES users(id);
 
-ALTER TABLE users
-ADD FOREIGN KEY (payment_id) REFERENCES payment(id);
+ALTER TABLE payment
+ADD FOREIGN KEY (user_id) REFERENCES users(id);
 
 ALTER TABLE orders
 ADD FOREIGN KEY (user_id) REFERENCES users(id);
@@ -90,29 +90,29 @@ ADD FOREIGN KEY (cart_id) REFERENCES carts(id);
 ALTER TABLE carts_products
 ADD FOREIGN KEY (product_id) REFERENCES products(id);
 
-INSERT INTO contact_details (first_name, last_name, address_line1, address_line2, city_town, postcode, phone)
+INSERT INTO users (email, password)
 VALUES
-	('bob', 'conrad', '123 main street', 'codeville', 'main city', 'MA34 1QR', '07745682901'),
-  ('dave', 'jones', '94 church lane', 'weston', 'brimington', 'B21 5KW', '07845027500'),
-  ('lucy', 'mcskillet', '107 trent rd', 'fulwood', 'queenstown', 'QU51 7XL', '07073480214'),
-  ('anne', 'kascinski', '3 farstang rd', 'deepdale', 'grondon', 'G4 6SA', '07789432794'),
-  ('joe', 'smith', '14 november street', 'gladstone', 'briddleton', 'BR9 3XP', '07639740125');
+	('bob@gmail.com', 'letmein'),
+  ('daveyj@hotmail.co.uk', 'password'),
+  ('lucymcskill@yahoo.com', 'panda123'),
+  ('ankascinksi@outlook.com', 'c0ff33'),
+  ('joe@gmail.com', 'smith78');
 
-INSERT INTO payment (name_on_card, payment_type, card_number, expiry)
+INSERT INTO contact_details (user_id, first_name, last_name, address_line1, address_line2, city_town, postcode, phone)
 VALUES
-	('Bob Conrad', 'VISA', 4431562178013497, '2024-11-14'),
-  ('Dave Jones', 'Mastercard', 4740184098480202, '2023-01-02'),
-  ('Lucy Mcskillet', 'VISA', 4431562178013498, '2025-09-19'),
-  ('Anne Kascinski', 'AmEx', 4431562178013499, '2024-04-28'),
-  ('Joe Smith', 'Mastercard', 4431562178013490, '2022-02-24');
+	(1, 'bob', 'conrad', '123 main street', 'codeville', 'main city', 'MA34 1QR', '07745682901'),
+  (2, 'dave', 'jones', '94 church lane', 'weston', 'brimington', 'B21 5KW', '07845027500'),
+  (3, 'lucy', 'mcskillet', '107 trent rd', 'fulwood', 'queenstown', 'QU51 7XL', '07073480214'),
+  (4, 'anne', 'kascinski', '3 farstang rd', 'deepdale', 'grondon', 'G4 6SA', '07789432794'),
+  (5, 'joe', 'smith', '14 november street', 'gladstone', 'briddleton', 'BR9 3XP', '07639740125');
 
-INSERT INTO users (contact_id, payment_id, email, password)
+INSERT INTO payment (user_id, name_on_card, payment_type, card_number, expiry)
 VALUES
-	(1, 1, 'bob@gmail.com', 'letmein'),
-  (2, 2, 'daveyj@hotmail.co.uk', 'password'),
-  (3, 3, 'lucymcskill@yahoo.com', 'panda123'),
-  (4, 4, 'ankascinksi@outlook.com', 'c0ff33'),
-  (5, 5, 'joe@gmail.com', 'smith78');
+	(1, 'Bob Conrad', 'VISA', 4431562178013497, '2024-11-14'),
+  (2, 'Dave Jones', 'Mastercard', 4740184098480202, '2023-01-02'),
+  (3, 'Lucy Mcskillet', 'VISA', 4431562178013498, '2025-09-19'),
+  (4, 'Anne Kascinski', 'AmEx', 4431562178013499, '2024-04-28'),
+  (5, 'Joe Smith', 'Mastercard', 4431562178013490, '2022-02-24');
 
 INSERT INTO products (product_name, category, description, price)
 VALUES

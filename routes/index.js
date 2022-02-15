@@ -8,9 +8,23 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.post('/login', passport.authenticate('local'), (req, res, next) => {
+router.get('/login', function(req, res, next) {
   res.render('login');
-  res.status(200).send('Authenticated.')
 });
+
+router.post('/login', passport.authenticate('local'), (req, res, next) => {
+  res.status(200).send('Authenticated.')
+  // successRedirect: '/',
+  // failureRedirect: '/login',
+});
+
+router.post('/register', (req,res,next) => {
+  const {email, password} = req.body;
+  db.query('INSERT INTO users (email, password) VALUES ($1, $2)', [email, password], (err, results) => {
+    if(err){
+      throw err;
+    } res.status(201).send(`User ${email} registered.`)
+  })
+})
 
 module.exports = router;

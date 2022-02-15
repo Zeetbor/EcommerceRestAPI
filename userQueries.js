@@ -1,10 +1,11 @@
 const db = require('./db/index.js');
 
 const getUsers = (request, response) => {
-  db.query('SELECT * FROM users ORDER BY id ASC', (err, results) => {
+  db.query('SELECT * FROM users ORDER BY id ASC', [], (err, results) => {
     if (err) {
       throw err
     }
+    console.log(results);
     response.status(200).json(results.rows)
   })
 }
@@ -17,37 +18,68 @@ const getUserById = (request, response) => {
       console.log(err)
       throw err
     }
-    console.log(results)
+    console.log(results.rows);
     response.status(200).json(results.rows);
   })
 }
 
-const createUser = (request, response) => {
-  const { name, email } = request.body
+// const getUserById = async (request, response) => {
+//   const id = parseInt(request.params.id);
+//   console.log(id);
+//   var results = await db.query('SELECT * FROM users WHERE id = $1', [id]);
+//   console.log(results.rows[0]);
+//   console.log("End getUserById");
+//
+//   return response.status(200).json(results.rows[0]);
+// }
 
-  db.query('INSERT INTO users (name, email) VALUES ($1, $2)', [name, email], (err, results) => {
-    if (err) {
-      throw err
+// const createUser = (request, response) => {
+//   const { email, password } = request.body
+//
+//   db.query('INSERT INTO users (email, password) VALUES ($1, $2)', [email, password], (err, results) => {
+//     if (err) {
+//       throw err
+//     }
+//     response.status(201).send(`User added with ID: ${result.insertId}`)
+//   })
+// }
+
+const createUser = (request, response) => {
+  const {email, password } = request.body
+
+  db.query('INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *', [email, password], (error, results) => {
+    if (error) {
+      throw error
+    } else if (!Array.isArray(results.rows) || results.rows.length < 1) {
+    	throw error
     }
-    response.status(201).send(`User added with ID: ${result.insertId}`)
+    response.status(201).send(`User added with ID: ${results.rows[0].id}`)
   })
 }
 
 const updateUser = (request, response) => {
   const id = parseInt(request.params.id)
-  const { name, email } = request.body
+  console.log(id);
+  const { email, password } = request.body
 
-  db.query(
-    'UPDATE users SET name = $1, email = $2 WHERE id = $3',
-    [name, email, id],
-    (err, results) => {
-      if (err) {
-        throw err
+    db.query(
+      'UPDATE users SET email = $1, password = $2 WHERE id = $3 RETURNING *',
+      [email, password, id],
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          throw error
+        }
+        if (typeof results.rows == 'undefined') {
+        	response.status(404).send(`Resource not found`);
+        } else if (Array.isArray(results.rows) && results.rows.length < 1) {
+        	response.status(404).send(`User not found`);
+        } else {
+    	 	  response.status(200).send(`User modified with ID: ${results.rows[0].id}`)
+        }
       }
-      response.status(200).send(`User modified with ID: ${id}`)
-    }
-  )
-}
+    )
+  }
 
 const deleteUser = (request, response) => {
   const id = parseInt(request.params.id)

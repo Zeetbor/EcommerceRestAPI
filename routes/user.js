@@ -8,7 +8,7 @@ userRouter.get('/:id', userQueries.getUserById);
 
 userRouter.put('/:id', userQueries.updateUser);
 
-userRouter.post('/:id', userQueries.createUser);
+userRouter.post('/', userQueries.createUser);
 
 userRouter.delete('/:id', userQueries.deleteUser);
 
