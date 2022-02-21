@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS payment (
 CREATE TABLE IF NOT EXISTS orders (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL,
-  created TIMESTAMP,
+  created TIMESTAMP DEFAULT now(),
   total MONEY,
   status VARCHAR(20)
 );
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS products (
 
 CREATE TABLE IF NOT EXISTS carts (
   id SERIAL PRIMARY KEY,
-  product_id INTEGER
+  user_id INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS orders_products (
@@ -73,10 +73,13 @@ ALTER TABLE orders
 ADD FOREIGN KEY (user_id) REFERENCES users(id);
 
 ALTER TABLE carts
-ADD FOREIGN KEY (product_id) REFERENCES products(id);
+ADD FOREIGN KEY (user_id) REFERENCES users(id);
 
 ALTER TABLE orders_products
 ADD FOREIGN KEY (order_id) REFERENCES orders(id);
+
+ALTER TABLE orders ALTER COLUMN created
+SET DEFAULT now();
 
 ALTER TABLE orders_products
 ADD FOREIGN KEY (product_id) REFERENCES products(id);

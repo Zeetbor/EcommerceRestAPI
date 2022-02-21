@@ -1,6 +1,6 @@
 const express = require('express');
 const userRouter = express.Router();
-const userQueries = require("../userQueries.js")
+const userQueries = require("../queries/userQueries.js")
 
 userRouter.get('/', userQueries.getUsers);
 

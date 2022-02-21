@@ -1,6 +1,6 @@
 const express = require('express');
 const productRouter = express.Router();
-const productQueries = require('../productQueries.js')
+const productQueries = require('../queries/productQueries.js')
 
 productRouter.get('/', productQueries.getProducts);
 

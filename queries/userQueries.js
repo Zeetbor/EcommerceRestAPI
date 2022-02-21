@@ -1,48 +1,23 @@
-const db = require('./db/index.js');
+const db = require('../db/index.js');
 
 const getUsers = (request, response) => {
   db.query('SELECT * FROM users ORDER BY id ASC', [], (err, results) => {
     if (err) {
       throw err
     }
-    console.log(results);
     response.status(200).json(results.rows)
   })
 }
 
 const getUserById = (request, response) => {
   const id = parseInt(request.params.id)
-    console.log(id)
   db.query('SELECT * FROM users WHERE id = $1', [id], (err, results) => {
     if (err) {
-      console.log(err)
       throw err
     }
-    console.log(results.rows);
     response.status(200).json(results.rows);
   })
 }
-
-// const getUserById = async (request, response) => {
-//   const id = parseInt(request.params.id);
-//   console.log(id);
-//   var results = await db.query('SELECT * FROM users WHERE id = $1', [id]);
-//   console.log(results.rows[0]);
-//   console.log("End getUserById");
-//
-//   return response.status(200).json(results.rows[0]);
-// }
-
-// const createUser = (request, response) => {
-//   const { email, password } = request.body
-//
-//   db.query('INSERT INTO users (email, password) VALUES ($1, $2)', [email, password], (err, results) => {
-//     if (err) {
-//       throw err
-//     }
-//     response.status(201).send(`User added with ID: ${result.insertId}`)
-//   })
-// }
 
 const createUser = (request, response) => {
   const {email, password } = request.body
@@ -66,7 +41,6 @@ const updateUser = (request, response) => {
       [email, password, id],
       (error, results) => {
         if (error) {
-          console.log(error);
           throw error
         }
         if (typeof results.rows == 'undefined') {
