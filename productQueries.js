@@ -1,9 +1,9 @@
 const db = require('./db/index.js');
 
 const getProducts = (request, response) => {
-  db.query('SELECT * FROM products ORDER BY id ASC', (err, results) => {
-    if (err) {
-      throw err
+  db.query('SELECT * FROM products ORDER BY id ASC', [], (error, results) => {
+    if (error) {
+      throw error
     }
     response.status(200).json(results.rows);
   })
@@ -13,10 +13,9 @@ const getProductById = (request, response) => {
   const id = parseInt(request.params.id);
   db.query('SELECT * FROM products WHERE id = $1', [id], (error, results) => {
     if (error) {
-      console.log(error)
-      throw (err);
+      throw (error);
     } else if (!Array.isArray(results.rows) || results.rows.length < 1) {
-      throw error;
+      response.status(404).send(`Product not found`);
     }
     response.status(200).json(results.rows[0])
   })
@@ -34,7 +33,7 @@ const addProduct = (request, response) => {
     if(error){
       throw error
     } else if (!Array.isArray(results.rows) || results.rows.length < 1) {
-      throw error
+      response.status(404).send(`Could not add product`);
     }
     response.status(201).send(`Product added with ID: ${results.rows[0].id}`)
   })
@@ -55,7 +54,7 @@ const updateProduct = (request, response) => {
     }   if (typeof results.rows == 'undefined') {
         response.status(404).send(`Resource not found`);
       } else if (Array.isArray(results.rows) && results.rows.length < 1) {
-        response.status(404).send(`User not found`);
+        response.status(404).send(`Product not found`);
       } else {
           response.status(200).send(`Product with ID: ${results.rows[0].id} updated`)
       }
@@ -69,9 +68,18 @@ const deleteProduct = (request, response) => {
     if (error) {
       throw error;
     }
-    response.status(200).send(`Product with ID: ${id} deleted.`);
+    response.status(204).send(`Product with ID: ${id} deleted.`);
   })
 };
+
+const getAllProductsByCategory = (request, response) => {
+  const category = request.params.category;
+  db.query('SELECT * FROM products WHERE category = $1', [category], (error, results) => {
+    if(error){
+      throw error;
+    } response.status(200).json(results.rows)
+  })
+}
 
 module.exports = {
   getProducts,
@@ -79,4 +87,5 @@ module.exports = {
   addProduct,
   updateProduct,
   deleteProduct,
+  getAllProductsByCategory
 }

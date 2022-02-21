@@ -59,7 +59,6 @@ const createUser = (request, response) => {
 
 const updateUser = (request, response) => {
   const id = parseInt(request.params.id)
-  console.log(id);
   const { email, password } = request.body
 
     db.query(
@@ -88,7 +87,7 @@ const deleteUser = (request, response) => {
     if (err) {
       throw err
     }
-    response.status(200).send(`User deleted with ID: ${id}`)
+    response.status(204).send(`User deleted with ID: ${id}`)
   })
 }
 

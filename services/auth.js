@@ -9,7 +9,7 @@ const checkAuthUser = (req, res, next) => {
     if(req.params.id === req.user.id) {
         return next()
     }
-    res.status(401).send()
+    res.status(401).send();
 }
 
 module.exports = {

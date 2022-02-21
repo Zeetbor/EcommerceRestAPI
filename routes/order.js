@@ -1,20 +1,35 @@
 const express = require('express');
 const orderRouter = express.Router();
+const db = require('../db/index.js');
 
-orderRouter.get('/', (req, res, next) => {
-  res.send('order page');
+const {
+  checkAuthenticated
+} = require('../services/auth.js');
+const {
+  findUserId,
+} = require('../services/user.js')
+
+orderRouter.get('/', checkAuthenticated, async (req, res, next) => {
+  try {
+    const userId = await findUserId(req.user.id)
+    const result = await db.query(`SELECT * FROM orders WHERE user_id = $1`,
+      [userId.id])
+    res.status(200).send(result.rows);
+  } catch(err){
+    next(err);
+  }
 });
 
-orderRouter.put('/:id', (req, res, next) => {
-  res.send();
-})
-
-orderRouter.post('/:id', (req, res, next) => {
-
-})
-
-orderRouter.delete('/:id', (req, res, next) => {
-  res.send();
-})
+orderRouter.get('/:id', checkAuthenticated, async (req, res, next) => {
+  try {
+    const orderId = parseInt(req.params.id);
+    console.log(orderId)
+    const result = await db.query(`SELECT * FROM orders WHERE id = $1`,
+      [orderId]);
+    res.status(200).send(result.rows);
+  } catch(err){
+    next(err);
+  }
+});
 
 module.exports = orderRouter;

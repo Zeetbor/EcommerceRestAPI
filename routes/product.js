@@ -6,10 +6,12 @@ productRouter.get('/', productQueries.getProducts);
 
 productRouter.get('/:id', productQueries.getProductById);
 
-productRouter.put('/:id', productQueries.updateProduct)
+productRouter.put('/:id', productQueries.updateProduct);
 
-productRouter.post('/', productQueries.addProduct)
+productRouter.post('/', productQueries.addProduct);
 
-productRouter.delete('/:id', productQueries.deleteProduct)
+productRouter.delete('/:id', productQueries.deleteProduct);
+
+productRouter.get('/category/:category', productQueries.getAllProductsByCategory);
 
 module.exports = productRouter;
