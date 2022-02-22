@@ -14,7 +14,8 @@ const {
 } = require('../services/cart.js')
 const {
   findUserId,
-} = require('../services/user.js')
+} = require('../services/user.js');
+const {checkPayment} = require('../services/checkout.js');
 
 //GET cart
 cartRouter.get('/', checkAuthenticated, async (req, res, next) => {
@@ -52,7 +53,7 @@ cartRouter.post('/newcart', checkAuthenticated, async (req, res, next) => {
       }
     ]);
     const result = await db.query(statement)
-    res.status(201).send(result.rows);
+    res.status(201).send(`New cart created for user: ${userId.id}`);
   } catch (err) {
     next(err);
   }
@@ -79,10 +80,11 @@ cartRouter.post('/items', checkAuthenticated, async (req, res, next) => {
 //PUT cart item quantity
 cartRouter.put('/items/:productId', checkAuthenticated, async (req, res, next) => {
   const productId = parseInt(req.params.productId);
+  console.log(productId)
+  const newQuantity = req.body.quantity;
+  console.log(newQuantity)
   try {
     const cartId = await findCartIdByUser(req.user.id);
-    const newQuantity = req.body.quantity;
-    console.log(newQuantity)
     const result = await db.query('UPDATE carts_products SET quantity = $1 WHERE cart_id = $2 AND product_id = $3 RETURNING *', [newQuantity, cartId.id, productId]);
     res.status(200).send(result.rows);
   } catch (err) {
@@ -118,14 +120,14 @@ cartRouter.delete('/items', checkAuthenticated, async (req, res, next) => {
       },
     ]);
     const result = db.query(statement);
-    res.status(204).send(result.rows[0])
+    res.status(204).send(`Cart with id: ${cartId} deleted for user id: ${userId}`)
   } catch (err) {
     next(err)
   }
 })
 
 //POST checkout
-cartRouter.post('/checkout', checkAuthenticated, async (req, res, next) => {
+cartRouter.post('/checkout', checkAuthenticated, checkPayment, async (req, res, next) => {
   try {
     const userId = await findUserId(req.user.id);
     const cartId = await findCartIdByUser(req.user.id);
@@ -136,7 +138,6 @@ cartRouter.post('/checkout', checkAuthenticated, async (req, res, next) => {
       total: cartTotal.rows[0].total,
       status: 'Pending Dispatch'
     };
-    console.log(cartId.id)
     const statement = pgp.helpers.concat([{
         query: 'INSERT INTO orders (user_id, total, status) VALUES ($1, $2, $3)',
         values: [data.user_id, data.total, data.status]

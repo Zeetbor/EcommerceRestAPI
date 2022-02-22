@@ -4,6 +4,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
+//Swagger
+
 require('dotenv').config();
 //environment variables from .env
 var db = require('./db');
@@ -88,6 +92,11 @@ app.use('/user', userRouter);
 app.use('/product', productRouter);
 app.use('/cart', cartRouter);
 app.use('/order', orderRouter);
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument)
+);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

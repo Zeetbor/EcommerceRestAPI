@@ -4,7 +4,8 @@ CREATE DATABASE Ecommerce;
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY NOT NULL,
   email VARCHAR(100) NOT NULL,
-  password VARCHAR(256) NOT NULL
+  password VARCHAR(256) NOT NULL,
+  CONSTRAINT email_unique UNIQUE (email)
 );
 
 CREATE TABLE IF NOT EXISTS contact_details (
@@ -64,16 +65,16 @@ CREATE TABLE IF NOT EXISTS carts_products (
 );
 
 ALTER TABLE contact_details
-ADD FOREIGN KEY (user_id) REFERENCES users(id);
+ADD FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
 ALTER TABLE payment
-ADD FOREIGN KEY (user_id) REFERENCES users(id);
+ADD FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
 ALTER TABLE orders
-ADD FOREIGN KEY (user_id) REFERENCES users(id);
+ADD FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
 ALTER TABLE carts
-ADD FOREIGN KEY (user_id) REFERENCES users(id);
+ADD FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
 ALTER TABLE orders_products
 ADD FOREIGN KEY (order_id) REFERENCES orders(id);
@@ -91,7 +92,7 @@ ALTER TABLE carts_products
 ADD FOREIGN KEY (product_id) REFERENCES products(id);
 
 ALTER TABLE payment
-ADD FOREIGN KEY (user_id) REFERENCES users(id);
+ADD FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
 INSERT INTO users (email, password)
 VALUES

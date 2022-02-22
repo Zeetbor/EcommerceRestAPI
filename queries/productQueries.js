@@ -53,10 +53,8 @@ const updateProduct = (request, response) => {
       throw error;
     }   if (typeof results.rows == 'undefined') {
         response.status(404).send(`Resource not found`);
-      } else if (Array.isArray(results.rows) && results.rows.length < 1) {
-        response.status(404).send(`Product not found`);
       } else {
-          response.status(200).send(`Product with ID: ${results.rows[0].id} updated`)
+          response.status(200).send(`Product with ID: ${id} updated`)
       }
     }
   )

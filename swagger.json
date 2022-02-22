@@ -1,0 +1,1002 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "REST API for Ecomemerce app built with express.js and psql",
+    "version": "0.1",
+    "title": "Ecommerce REST API"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Gets homepage",
+        "produces": [
+          "text/html"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns homepage",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "tags": [
+          "root"
+        ]
+      }
+    },
+    "/user": {
+      "get": {
+        "summary": "Gets all users",
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Definition generated from Swagger Inspector",
+            "schema": {
+              "$ref": "#/definitions/Model0"
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ]
+      }
+
+    },
+    "/user/{userId}": {
+      "get": {
+        "summary": "Gets user by id",
+        "produces": ["application/json"],
+        "parameters": [{
+          "name": "userId",
+          "in": "path",
+          "description": "Id of chosen user. Example values for path are: '3' and '1'",
+          "required": true,
+          "type": "integer"
+        }],
+        "responses": {
+          "200": {
+            "description": "Definition generated from Swagger Inspector",
+            "schema": {
+              "$ref": "#/definitions/Model1"
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ]
+      },
+      "put": {
+        "summary": "Updates user details",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/html"
+        ],
+        "parameters": [{
+          "name": "userId",
+          "in": "path",
+          "description": "Id of chosen user. Example values for path are: '3' and '1'",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "in": "body",
+          "name": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/Model1"
+          },
+          "x-examples": {
+            "application/json": "{\n        \"email\": \"bob@gmail.com\",\n        \"password\": \"bobspassword\"\n}"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Returns updated user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ]
+      },
+      "delete": {
+        "summary": "Deletes user profile",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "Id of chosen user. Example values for path are: '3' and '1'",
+            "required": true,
+            "type": "integer"
+          },
+          {
+          "in": "body",
+          "name": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/Model6"
+          },
+          "x-examples": {
+            "application/json": "{\n        \"email\": \"bob@gmail.com\",\n        \"password\": \"bobspassword\"\n}"
+          }
+        }],
+        "responses": {
+          "204": {
+            "description": "User deleted from database",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ]
+      }
+    },
+
+    "/register": {
+      "post": {
+        "summary": "Registers new user in database",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/html"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/Model4"
+          },
+          "x-examples": {
+            "application/json": "{\n        \"email\": \"bob@gmail.com\",\n        \"password\": \"letmein\"\n}"
+          }
+        }],
+        "responses": {
+          "201": {
+            "description": "Returns newly created user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/login": {
+      "get": {
+        "summary": "Gets user login page",
+        "produces": [
+          "text/html"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns user login page",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ]
+      },
+      "post": {
+        "summary": "Authenticates user via passport. Authentication required for cart and order routes",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/html"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/Model7"
+          },
+          "x-examples": {
+            "application/json": "{\n        \"username\": \"bob@gmail.com\",\n        \"password\": \"letmein\"\n}"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Returns user authentication status",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/product": {
+      "get": {
+        "summary": "Gets all products from database",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns all products",
+            "schema": {
+              "$ref": "#/definitions/Model9"
+            }
+          }
+        },
+        "tags": [
+          "product"
+        ]
+      },
+      "post": {
+        "summary": "Adds product to user cart",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/html"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/Model5"
+          },
+          "x-examples": {
+            "application/json": "{\n        \"product_name\": \"iphone\",\n        \"category\": \"technology\",\n        \"description\": \"iphone 12 pro max 256gb\",\n        \"price\": 900\n}"
+          }
+        }],
+        "responses": {
+          "201": {
+            "description": "Returns products added to the cart",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "tags": [
+          "product"
+        ]
+      }
+    },
+    "/product/category/{productCategory}": {
+      "get": {
+        "summary": "Gets all products by category",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "path",
+            "name": "productCategory",
+            "type": "string",
+            "required": "true",
+            "description": "Category type of the products to get"
+        }],
+        "responses": {
+          "200": {
+            "description": "Returns all products that match chosen product category",
+            "schema": {
+              "$ref": "#/definitions/Model12"
+            }
+          }
+        },
+        "tags": [
+          "product"
+        ]
+      }
+    },
+    "/product/{productId}": {
+      "get": {
+        "summary": "Get product by productid",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "name": "productId",
+          "in": "path",
+          "description": "Example values form path are: '3' and '1'",
+          "required": true,
+          "type": "integer"
+        }],
+        "responses": {
+          "200": {
+            "description": "Returns chosen product",
+            "schema": {
+              "$ref": "#/definitions/Model8"
+            }
+          }
+        },
+        "tags": [
+          "product"
+        ]
+      },
+      "put": {
+        "summary": "Updates product details",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "text/html"
+        ],
+        "parameters": [
+          {
+          "name": "productId",
+          "in": "path",
+          "description": "Example values form path are: '3' and '1'",
+          "required": true,
+          "type": "integer"
+        },
+          {
+          "in": "body",
+          "name": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/Model2"
+          },
+          "x-examples": {
+            "application/json": "{\n        \"product_name\": \"iphone\",\n        \"category\": \"technology\",\n        \"description\": \"iphone 12 pro max 256gb\",\n        \"price\": 800\n}"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Returns updated product",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "tags": [
+          "product"
+        ]
+      },
+      "delete": {
+        "summary": "Deletes product from products database",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [{
+          "name": "productId",
+          "in": "path",
+          "description": "Example values form path are: '3' and '1'",
+          "required": true,
+          "type": "integer"
+        }],
+        "responses": {
+          "204": {
+            "description": "Confirms deletion of product",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "tags": [
+          "product"
+        ]
+      }
+    },
+
+    "/cart/newcart": {
+      "post": {
+        "summary": "Creates new cart for authenticated user",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/Model0"
+          },
+          "x-examples": {
+            "application/json": "{\n        \"product_name\": \"iphone\",\n        \"category\": \"technology\",\n        \"description\": \"iphone 12 pro max 256gb\",\n        \"price\": 800\n}"
+          }
+        }],
+        "responses": {
+          "201": {
+            "description": "Returns newly created cart",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "tags": [
+          "cart"
+        ]
+      }
+    },
+
+
+    "/cart/items": {
+      "post": {
+        "summary": "Adds items to the users cart",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/Model9"
+          },
+          "x-examples": {
+            "application/json": "[{\n    \"product_name\": \"Vase\",\n    \"quantity\": 3\n},\n{\n    \"product_name\": \"LG TV\",\n    \"quantity\": 1\n}]"
+          }
+        }],
+        "responses": {
+          "201": {
+            "description": "Returns products added to the cart",
+            "schema": {
+              "$ref": "#/definitions/Model18_Array"
+            }
+          }
+        },
+        "tags": [
+          "cart"
+        ]
+      },
+      "delete": {
+        "summary": "Deletes user cart based on authenticated user",
+        "consumes": ["application/json"],
+        "produces": ["text/html"],
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "Confirms cart deletion",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "tags": [
+          "cart"
+        ]
+      }
+    },
+    "/cart/items/{productId}": {
+      "put": {
+        "summary": "Updates quantity of item in the user cart",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/Model3"
+          },
+          "x-examples": {
+            "application/json": "{\n    \"quantity\": 4\n}"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Confirms cart update",
+            "schema": {
+              "$ref": "#/definitions/Model12_Array"
+            }
+          }
+        },
+        "tags": [
+          "cart"
+        ]
+      },
+      "delete": {
+        "summary": "Removes item from user cart",
+        "consumes": ["application/json"],
+        "parameters": [  {
+            "name": "productId",
+            "in": "path",
+            "description": "Id of chosen product. Example values for path are: '3' and '1'",
+            "required": true,
+            "type": "integer"
+          }],
+        "responses": {
+          "204": {
+            "description": "Confirms item deleted from the user cart",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "tags": [
+          "cart"
+        ]
+      }
+    },
+    "/order": {
+      "get": {
+        "summary": "Gets all orders",
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns all user orders from the database",
+            "schema": {
+              "$ref": "#/definitions/Model21_Array"
+            }
+          }
+        },
+        "tags": [
+          "order"
+        ]
+      }
+    },
+    "/order/{orderId}": {
+      "get": {
+        "summary": "Gets user orders by userid",
+        "produces": ["application/json"],
+        "parameters": [{
+            "in": "path",
+            "name": "orderId",
+            "type": "string",
+            "required": "true",
+            "description": "orderId to get, example values are '3' and '6'"
+        }],
+        "responses": {
+          "200": {
+            "description": "Returns user orders by userid",
+            "schema": {
+              "$ref": "#/definitions/Model21_Array"
+            }
+          }
+        },
+        "tags": [
+          "order"
+        ]
+      }
+    },
+    "/cart/checkout": {
+      "post": {
+        "summary": "Checks payment info for user and produces order based on user cart contents",
+        "consumes": ["application/json"],
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "required": false,
+          "description": "Body requires card_number and expiry. Example: '4431562178013497' and '2024-11-14'",
+          "schema": {
+            "$ref": "#/definitions/Model24_Array"
+          },
+          "x-examples": {
+            "application/json": "{\n    \"card_number\": 4431562178013497,\n    \"expiry\": \"2024-11-14\"\n}"
+          }
+        }],
+        "responses": {
+          "201": {
+            "description": "Payment accepted, order generated and checkout confirmed",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "tags": [
+          "cart"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "Model0": {
+      "properties": {
+        "product_name": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Model1": {
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "Model2": {
+      "properties": {
+        "product_name": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Model3": {
+      "properties": {
+        "product_name": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Model4": {
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "Model5": {
+      "properties": {
+        "product_name": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Model6": {
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "Model7": {
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "Model8": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "product_name": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "string"
+        }
+      }
+    },
+    "Array": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "product_name": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "string"
+        }
+      }
+    },
+    "Model9": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Array"
+      }
+    },
+    "Model10_Array": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "Model11_Array": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "Model12_Array": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "product_name": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "string"
+        }
+      }
+    },
+    "Model12": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Model12_Array"
+      }
+    },
+    "Model13": {
+      "properties": {
+        "card_number": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "expiry": {
+          "type": "string"
+        }
+      }
+    },
+    "Array": {
+      "properties": {
+        "product_name": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Model14": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Array"
+      }
+    },
+    "Model15": {
+      "properties": {
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Model16": {
+      "properties": {
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Model17": {
+      "properties": {
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Model18_Array": {
+      "properties": {
+        "cart_id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "product_id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Model18": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Model5_Array"
+      }
+    },
+    "Model19_Array": {
+      "properties": {
+        "cart_id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "product_id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "quantity": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Model19": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Model6_Array"
+      }
+    },
+    "Model20_Array": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "created": {
+          "type": "string"
+        },
+        "total": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "Model20": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Model7_Array"
+      }
+    },
+    "Model21_Array": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "user_id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "created": {
+          "type": "string"
+        },
+        "total": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "Model21": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Model8_Array"
+      }
+    },
+    "Model22": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Array"
+      }
+    },
+    "Model23_Array": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "Model23": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Model23_Array"
+      }
+    },
+    "Model24_Array": {
+      "properties": {
+        "card_number": {
+          "type": "integer",
+          "format": "varchar(20)"
+        },
+        "expiry": {
+          "type": "string"
+        }
+      }
+    },
+    "Model24": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Model24_Array"
+      }
+    }
+  }
+}

@@ -8,7 +8,7 @@ const {
 const {
   findUserId,
 } = require('../services/user.js')
-const {checkPayment} = require('../services/checkout.js')
+
 
 orderRouter.get('/', checkAuthenticated, async (req, res, next) => {
   try {
@@ -21,9 +21,11 @@ orderRouter.get('/', checkAuthenticated, async (req, res, next) => {
   }
 });
 
-orderRouter.get('/:id', checkPayment, checkAuthenticated, async (req, res, next) => {
+orderRouter.get('/:id', checkAuthenticated, async (req, res, next) => {
+  const orderId = parseInt(req.params.id);
+  console.log(orderId);
   try {
-    const orderId = parseInt(req.params.id);
+
     const result = await db.query(`SELECT * FROM orders WHERE id = $1`,
       [orderId]);
     res.status(200).send(result.rows);
